@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- -- css -- -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" type="image/x-icon"  href="./images/Vector.png">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/d87e9d49a2.js" crossorigin="anonymous"></script>
+    <title>Les Petits Plats</title>
+</head>
+<body>
+ <main>
+    <header>
+        <div class="logo">
+            <img src="images/logos petits plats.jpg" alt="logo les petits plats">
+        </div>
+    </header>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="search">
+                    <input type="text" class="form-control"name="recipe" id="recipes" placeholder="Rechercher une recette">
+                    <i class="fa fa-search"></i>  
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="padBtn">
+                <input type="text" class="Ingredient-Recipes btn btn-primary dropdown-toggle"name="Ingredient" id="Ingredients" placeholder="Ingredients">
+                <button type="button" class="btn btn-primary dropPosition dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <span class="dropdown-menu dropdown-ingredient" id="ingredientTag">
+                    <div><p class="dropdown-item fontSearch">Rechercher un ingédient</p></div>
+                    <!-- <p><a class="dropdown-item" href="#">Another action</a></p> -->
+                    <div id="ingredientCard"></div>
+
+                </span>
+                    <!-- <input type="text" class="btn Appareils-Recipes dropdown-toggle"name="Appareil" id="Appareils" placeholder="Appareils">
+
+                    <input type="text" class="btn Ustensiles-Recipes"name="Ustensile" id="Ustensiles" placeholder="Ustensiles"> -->
+            </div>
+            
+                     
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <section id="recipesHome" class="row">
+                </section>
+            </div>
+        </div>
+    </div>
+    
+ </main>
+ <script src="/script/recipe.js"></script>
+ <script src="/script/tagIngredient.js"></script>
+</body>
+</html>

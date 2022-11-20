@@ -1,0 +1,236 @@
+.logo
+{
+    display: flex;
+    justify-content: center;
+}
+.logo img
+{
+    width: 300px;   
+    PADDING: 24px;
+}
+/* search bar */
+.search{
+position: relative;
+box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+    
+}
+
+.search input{
+
+    height: 60px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4;
+    background: #E7E7E7;
+
+
+}
+
+
+.search input:focus{
+
+    box-shadow: none;
+    border: 2px solid blue;
+
+
+}
+
+.search .fa-search{
+
+    position: absolute;
+    top: 20px;
+    left: 94%;
+    font-size: 162%;
+}
+/* style button */
+.searchPerType
+{
+    display:flex;
+    flex-direction: row;
+}
+::placeholder
+{
+    color: white;
+}
+.Appareils-Recipes
+{
+    background: #68D9A4;
+    border-radius: 5px;
+    
+}
+.Ustensiles-Recipes
+{
+    background: #ED6454;
+    border-radius: 5px;
+}
+.Ingredient-Recipes
+{
+    position: absolute;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 22px;
+/* identical to box height */
+
+text-align: center;
+
+color: #FFFFFF;
+height: 48px;
+width: 165px;
+
+border-radius: 5px;
+
+}
+.dropPosition
+{
+    position: relative;
+    left: 135px;
+    bottom: -6px;
+}
+.btn.show,.btn:hover{
+    background-color: #0d6efd;
+    border-color:#0d6efd;
+}
+/* tags style */
+.dropdown-menu.show
+{
+    height: 397px;
+width: 667px;
+border-radius: 5px;
+
+}
+#ingredientCard
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.recipeIngredientTags
+{
+
+
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 18px;
+line-height: 22px;
+/* identical to box height */
+
+
+color: #FFFFFF;
+}
+/* Drop down style */
+.padBtn
+{
+    padding: 20px 10px 33px 10px;
+}
+.dropdown-ingredient
+{
+    background-color: #0d6efd;
+    color: #FFFFFF;
+    inset:-47px auto auto -136px !important;
+}
+.fontSearch{
+    opacity: 0.5;
+}
+/* article style */
+#recipesHome
+{
+    
+    justify-content: space-between;
+}
+.recipePic
+{
+    height: 178px;
+    width: 380px;
+    background: #C7BEBE;
+}
+.recipeInfo
+{
+    height: 178px;
+width: 380px;
+position: relative;
+background: #E7E7E7;
+
+}
+.recipeCard
+{
+    height: 364px;
+width: 380px;
+left: 0px;
+top: 0px;
+border-radius: 5px;
+margin-bottom: 27px;
+
+}
+.recipeTitle h2
+{
+    font-family: Lato;
+font-size: 18px;
+font-weight: 400;
+line-height: 22px;
+letter-spacing: 0em;
+text-align: left;
+position: absolute;
+    left: 0px;
+    width: 214px;
+
+}
+.recipeTime .far
+{
+    height: 20px;
+    width: 20px;
+    left: 224px;
+    top: 7px;
+border-radius: 0px;
+position: absolute;
+
+}
+.recipeTimeText
+{
+    position: absolute;
+    height: 20px;
+    width: 108px;
+    left: 246px;
+    top: 2px;
+    border-radius: 0px;
+
+}
+.recipeIngredient
+{
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 700;
+    
+
+}
+.productDescription
+{
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+text-overflow: ellipsis;
+
+
+}
+.description
+{
+    height: 109px;
+    width: 171px;
+    position: absolute;
+    left: 210px;
+    top: 37px;
+}
+.ingredients
+{
+    position: absolute;
+    left: 2px;
+    /* right: 49.74%; */
+    top: 55px;
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 0px;
+}
