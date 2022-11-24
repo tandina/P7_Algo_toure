@@ -37,17 +37,57 @@
                     <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <span class="dropdown-menu dropdown-ingredient" id="ingredientTag">
-                    <div><p class="dropdown-item fontSearch">Rechercher un ingédient</p></div>
+                    <div class="searchTag">
+                        <p class="dropdown-item fontSearch ">Rechercher un ingédient</p>
+                        <div class="dropdown-toggle arrowPos"></div>
+                    </div>
                     <!-- <p><a class="dropdown-item" href="#">Another action</a></p> -->
-                    <div id="ingredientCard"></div>
+                    <div id="ingredientCard" ></div>
 
                 </span>
+                
                     <!-- <input type="text" class="btn Appareils-Recipes dropdown-toggle"name="Appareil" id="Appareils" placeholder="Appareils">
 
                     <input type="text" class="btn Ustensiles-Recipes"name="Ustensile" id="Ustensiles" placeholder="Ustensiles"> -->
             </div>
-            
-                     
+            <div class="padBtn">
+                <input type="text" class="Ingredient-Recipes btn btn1 btn.show1 btn-appareil btn-success dropdown-toggle"name="Appareil" id="Appareils" placeholder="Appareils">
+                <button type="button" class="btn btn.show1 btn1 btn-appareil btn-success dropPosition dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <span class="dropdown-menu dropdown-appareils" id="AppareilTag">
+                    <div class="searchTag">
+                        <p class="dropdown-item fontSearch ">Rechercher un Appareils</p>
+                        <div class="dropdown-toggle arrowPos"></div>
+                    </div>
+                    <!-- <p><a class="dropdown-item" href="#">Another action</a></p> -->
+                    <div id="AppareilsCard" ></div>
+
+                </span>
+                
+                    <!-- <input type="text" class="btn Appareils-Recipes dropdown-toggle"name="Appareil" id="Appareils" placeholder="Appareils">
+
+                    <input type="text" class="btn Ustensiles-Recipes"name="Ustensile" id="Ustensiles" placeholder="Ustensiles"> -->
+            </div>
+            <div class="padBtn">
+                <input type="text" class="Ingredient-Recipes btn  btn-danger btn2 btn.show2 dropdown-toggle"name="Ustensile" id="Ustensiles" placeholder="Ustensiles">
+                <button type="button" class="btn  btn-danger btn2 btn.show2 dropPosition dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <span class="dropdown-menu dropdown-ustensils" id="UstensilTag">
+                    <div class="searchTag">
+                        <p class="dropdown-item fontSearch ">Rechercher un ustensils</p>
+                        <div class="dropdown-toggle arrowPos"></div>
+                    </div>
+                    <!-- <p><a class="dropdown-item" href="#">Another action</a></p> -->
+                    <div id="UstensilCard" ></div>
+
+                </span>
+                
+                    <!-- <input type="text" class="btn Appareils-Recipes dropdown-toggle"name="Appareil" id="Appareils" placeholder="Appareils">
+
+                    <input type="text" class="btn Ustensiles-Recipes"name="Ustensile" id="Ustensiles" placeholder="Ustensiles"> -->
+            </div>          
         </div>
     </div>
     <div class="container">
@@ -62,5 +102,7 @@
  </main>
  <script src="/script/recipe.js"></script>
  <script src="/script/tagIngredient.js"></script>
+ <script src="/script/tagAppareils.js"></script>
+ <script src="/script/tagUstensils.js"></script>
 </body>
 </html>

@@ -1,12 +1,11 @@
-// const data='/data/recipes.json';
-// puts content in given balise
-
+// // const data='/data/recipes.json';
+   
 
 // checks if ingredient {check} is already present
-const checkDouble = (allIngredient, check) => {
+const checkDoubleAppliance = (allAppliance, check) => {
   let result = false;
-  allIngredient.forEach(ingredient => {
-      if (ingredient.name.toLowerCase() == check.toLowerCase()) {
+  allAppliance.forEach(appliance => {
+      if (appliance.name.toLowerCase() == check.toLowerCase()) {
           result = true;
           return ;
       }
@@ -14,26 +13,24 @@ const checkDouble = (allIngredient, check) => {
   return result;
 }
 
-const	extractIngredient = (ingredientSet) => {
-  let allIngredient = [];
+const	extractAppliance = (applianceSet) => {
+  let allAppliance = [];
   let currentId = 0;
-
-  ingredientSet.forEach(set => {
+  console.log(allAppliance);
+  applianceSet.forEach(set => {
       set.forEach(_set => {
-          currentId = _set.id;
-          _set.ingredients.forEach(ingredient => {
-            console.log(ingredient);
-              if (checkDouble(allIngredient, ingredient.ingredient) == false) {
-                  allIngredient.push({id: currentId, name: ingredient.ingredient});
-              }
-          });
-      });
+        currentId = _set.id;
+        if (checkDoubleAppliance(allAppliance, _set.appliance) == false) {
+          allAppliance.push({id: currentId, name: _set.appliance});
+          
+      }});
   });
-  return (allIngredient);
+  return (allAppliance);
+  
 }
 
-const ingredientsTags = document.querySelector('#ingredientCard');
-  (async function fetchRecipes() {
+const appliancesTags = document.querySelector('#AppareilsCard');
+(async function fetchAppliances() {
     try {
         // after this line, our function will wait for the `fetch()` call to be settled
         // the `fetch()` call will either return a Response or throw an error
@@ -47,17 +44,16 @@ const ingredientsTags = document.querySelector('#ingredientCard');
         // <p>${test()}:${recipe.quantity} ${recipe.unit}</p>
         const recipes = await response.json();
         // console.log(recipes);
-        const ingredientSet = new Set;
-        ingredientSet.add(recipes);
-        const ingredients = extractIngredient(ingredientSet);
+        const applianceSet = new Set;
+        applianceSet.add(recipes);
+        const appliancesUn = extractAppliance(applianceSet);
         
-        // console.log(ingredientSet);
+        console.log(applianceSet);
         console.log("here");
-        console.log(ingredients);
-       
+        console.log(appliancesUn);
 
-        ingredients.forEach(value => {
-          ingredientsTags.innerHTML += `
+        appliancesUn.forEach(value => {
+          appliancesTags.innerHTML += `
                       <p><span ${value.id}></span>${value.name}</p>
                       `
         });
@@ -70,3 +66,4 @@ const ingredientsTags = document.querySelector('#ingredientCard');
     }
     
   })();
+

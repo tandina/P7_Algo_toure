@@ -91,6 +91,19 @@ border-radius: 5px;
     background-color: #0d6efd;
     border-color:#0d6efd;
 }
+.btn.show1,.btn1:hover{
+    background-color: #68D9A4;
+    border-color:#68D9A4;
+    --bs-btn-border-color: #68d9a4;
+}
+.btn-success{
+    --bs-btn-border-color: #68d9a4;
+}
+.btn.show2,.btn2:hover,.btn-danger{
+    background-color: #dc3545;
+    border-color:#dc3545;
+}
+
 /* tags style */
 .dropdown-menu.show
 {
@@ -99,12 +112,48 @@ width: 667px;
 border-radius: 5px;
 
 }
-#ingredientCard
+.searchTag
 {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-right: 35px;
 }
+.arrowPos
+{
+    transform: rotate(180deg);
+    top: 20px;
+    position: relative;
+    height: 9px;
+    cursor: pointer;
+}
+.dropdown-menu
+{
+    --bs-dropdown-link-hover-color: none;
+    --bs-dropdown-link-hover-bg:none;
+    cursor: default;
+}
+#ingredientCard,#AppareilsCard, #UstensilCard {
+    display: flex;
+    flex-direction: COLUMN;
+    flex-wrap: wrap;
+    height: 339px;
+    width: 664px;
+    overflow: auto;
+    padding-left: 20px;
+    /* scrollbar-color: #0060ec; */
+
+}
+#ingredientCard p,#AppareilsCard p, #UstensilCard p
+{
+    width: 34%;
+    cursor: pointer;
+}
+#ingredientCard::-webkit-scrollbar-thumb {
+    background: #0060ec;
+    border-radius: 5px;
+}
+
 .recipeIngredientTags
 {
 
@@ -123,6 +172,7 @@ color: #FFFFFF;
 .padBtn
 {
     padding: 20px 10px 33px 10px;
+    width: 182px;
 }
 .dropdown-ingredient
 {
@@ -130,9 +180,33 @@ color: #FFFFFF;
     color: #FFFFFF;
     inset:-47px auto auto -136px !important;
 }
+.dropdown-appareils
+{
+    background-color: #68D9A4;
+    color: #FFFFFF;
+    inset:-47px auto auto -136px !important;
+}
+.dropdown-ustensils
+{
+    background-color: #dc3545;
+    color: #FFFFFF;
+    inset:-47px auto auto -136px !important;
+}
 .fontSearch{
     opacity: 0.5;
 }
+.btn-appareil
+{
+    background-color:#68D9A4;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #68D9A4 !important;
+    --bs-btn-hover-border-color: #68D9A4!important;
+    --bs-link-hover-color: #68D9A4!important;
+}
+/* .fix-btn hover
+{
+    hover
+} */
 /* article style */
 #recipesHome
 {
