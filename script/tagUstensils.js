@@ -52,13 +52,13 @@ const checkDoubleUstensils = (allUstensil, check) => {
           ustensilSet.add(recipes);
           const ustensils = extractUstensil(ustensilSet);
           
-          console.log(ustensilSet);
-          console.log("here");
-          console.log(ustensils);
+          // console.log(ustensilSet);
+          // console.log("here");
+          // console.log(ustensils);
          
   
           ustensils.forEach(value => {
-            console.log(ustensils);
+            // console.log(ustensils);
             ustensilsTags.innerHTML += `
                         <p><span ${value.id}></span>${value.name}</p>
                         `
