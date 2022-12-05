@@ -51,19 +51,7 @@ const recipeMatchFilter = (recipe, filter) => {
         // || recipe.description.toLowerCase().includes(filter)
         || ingredientMatchFilter(recipe.ingredients, filter));
 }
-// const searchBar =  document.getElementById('searchBar');
-// let recipes = [];
-// console.log(searchBar);
 
-// searchBar.addEventListener('keyup',(e) => {
-//     const searchString = e.target.value.toLowerCase()
-//     const filteredSearch = recipes.filter((string) =>{
-//         return (
-//             string.name.toLowerCase().includes(searchString) || string.description.toLowerCase().includes(searchString)
-//         );
-//     });
-//     console.log(filteredSearch);
-// puts content in given balise
 
 
 const searchInput = document.getElementById("searchBar")
@@ -79,32 +67,7 @@ const intervalId = window.setInterval(() => {
     }
 }, 100);
 
-// searchInput.addEventListener("keydown", (e) => {
-//     if (e.key === "Backspace" ) {
-//         recipes = backupRecipes;
-//         recipes = recipes.filter(recipe => recipeMatchFilter(recipe, e.target.value));
-//         renderRecipe(recipeData);
-//     }
-// })
 
-// searchInput.addEventListener("input", (e) => {
-//     console.log(e.target.value);
-//     if (e.target.value.length >= 3) {
-//         console.log("try match");
-//         recipes = recipes.filter(recipe => recipeMatchFilter(recipe, e.target.value));
-//         renderRecipe(recipeData);
-//     }
-//     console.log(e.key);
-// });
-//     const value= e.target.value.toLowerCase()
-//     recipes.forEach(recipe => {
-//         card = document.querySelector('.recipeCard')
-//         const isVisible = recipe.name.toLowerCase().includes(value) || recipe.description.toLowerCase().includes(value)
-//         card.classList.toggle("hide",!isVisible)
-//         console.log(card.classList);
-//     })
-//     console.log(value);
-// });
 const putBalise = (content, balise) => {
     return (`<${balise}> ${content} </${balise}>`);
 }
