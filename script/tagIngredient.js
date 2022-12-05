@@ -22,7 +22,7 @@ const	extractIngredient = (ingredientSet) => {
       set.forEach(_set => {
           currentId = _set.id;
           _set.ingredients.forEach(ingredient => {
-            console.log(ingredient);
+            // console.log(ingredient);
               if (checkDouble(allIngredient, ingredient.ingredient) == false) {
                   allIngredient.push({id: currentId, name: ingredient.ingredient});
               }
