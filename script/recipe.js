@@ -109,12 +109,17 @@ searchInput.addEventListener("keydown", (e) => (change = true));
 // check for change in input every 100ms
 const InputChangeIntervalId = window.setInterval(() => {
   if (change) {
+  // case input too small
+    if (searchInput.value != "" && searchInput.value.length < 3) {
+      change = false;
+      return ;
+    }console.time('ForEachMethod');
     recipes = backupRecipes;
     recipes = recipes.filter((recipe) =>
       recipeMatchFilter(recipe, searchInput.value)
     );
     renderRecipe(recipeData);
-    change = false;
+    change = false;console.timeEnd('ForEachMethod');
   }
 }, 100);
 
