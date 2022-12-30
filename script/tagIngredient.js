@@ -7,31 +7,39 @@ import {
   getStore,
   getNotify,
   setNotify,
+  pendingTagRender,
+  getView,
+  filterView,
 } from "./store.js";
 const data = "/data/recipes.json";
 
 const onClick = (value) => {
-  console.log("test");
-  console.log(value);
   addTag("INGREDIENT", value);
+  pendingTagRender.setNotify("INGREDIENT", true);
+};
+
+window.setInterval(() => {
+  if (!pendingTagRender.getNotify("INGREDIENT")) return;
   renderTags(
     ingredientsTags,
     getStore("INGREDIENT")[0],
     "ingredient",
     onClick,
-    getTag("INGREDIENT")
+    filterView(getView(), "INGREDIENT")
   );
-};
+  pendingTagRender.setNotify("INGREDIENT", false);
+}, 2);
 
-// checks if ingredient {check} is already present
+// checks if ingredient check is already present
 const checkDouble = (allIngredient, check) => {
   let result = false;
-  allIngredient.forEach((ingredient) => {
+  for (let i = 0; i < allIngredient.length; i++) {
+    let ingredient = allIngredient[i];
     if (ingredient.name.toLowerCase() == check.toLowerCase()) {
       result = true;
-      return;
+      break;
     }
-  });
+  }
   return result;
 };
 
@@ -43,7 +51,6 @@ const extractIngredient = (ingredientSet) => {
     set.forEach((_set) => {
       currentId = _set.id;
       _set.ingredients.forEach((ingredient) => {
-        // console.log(ingredient);
         if (checkDouble(allIngredient, ingredient.ingredient) == false) {
           allIngredient.push({ id: currentId, name: ingredient.ingredient });
         }
@@ -51,10 +58,6 @@ const extractIngredient = (ingredientSet) => {
     });
   });
   return allIngredient;
-};
-
-const test = () => {
-  console.log("haha");
 };
 
 let ingredientLen = -1;
@@ -78,11 +81,6 @@ const ingredientsTags = document.querySelector("#ingredientCard");
     const ingredients = extractIngredient(ingredientSet);
     setStore("INGREDIENT", ingredients);
 
-    // console.log(ingredientSet);
-    console.log("here");
-    console.log(ingredients);
-
-    // we need to provide the index as id to avoid duplicate ids
     ingredientLen = ingredients.length;
     renderTags(
       ingredientsTags,
@@ -91,17 +89,6 @@ const ingredientsTags = document.querySelector("#ingredientCard");
       onClick,
       getTag("INGREDIENT")
     );
-    setInterval(() => {
-      if (!getNotify("INGREDIENT")) return;
-      renderTags(
-        ingredientsTags,
-        getStore("INGREDIENT")[0],
-        "ingredient",
-        onClick,
-        getTag("INGREDIENT")
-      );
-      setNotify("INGREDIENT", false);
-    }, 100);
   } catch (error) {
     console.error(`Could not get recipes: ${error}`);
   }

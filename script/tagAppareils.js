@@ -7,37 +7,49 @@ import {
   getStore,
   getNotify,
   setNotify,
+  pendingTagRender,
+  filterView,
+  getView,
 } from "./store.js";
 const data = "/data/recipes.json";
 
 const onClick = (value) => {
-  console.log(`value is ${value}`);
   addTag("DEVICE", value);
+  pendingTagRender.setNotify("DEVICE", true);
+};
+
+window.setInterval(() => {
+  if (
+    !pendingTagRender.getNotify("DEVICE") //||
+  )
+    return;
   renderTags(
     appliancesTags,
     getStore("DEVICE")[0],
     "device",
     onClick,
-    getTag("DEVICE")
+    filterView(getView(), "DEVICE")
   );
-};
+  pendingTagRender.setNotify("DEVICE", false);
+}, 2);
 
 // checks if ingredient {check} is already present
 const checkDoubleAppliance = (allAppliance, check) => {
   let result = false;
-  allAppliance.forEach((appliance) => {
+
+  for (let i = 0; i < allAppliance.length; i++) {
+    let appliance = allAppliance[i];
     if (appliance.name.toLowerCase() == check.toLowerCase()) {
       result = true;
-      return;
+      break;
     }
-  });
+  }
   return result;
 };
 
 const extractAppliance = (applianceSet) => {
   let allAppliance = [];
   let currentId = 0;
-  console.log(allAppliance);
   applianceSet.forEach((set) => {
     set.forEach((_set) => {
       currentId = _set.id;
@@ -69,9 +81,6 @@ const appliancesTags = document.querySelector("#AppareilsCard");
     const appliancesUn = extractAppliance(applianceSet);
     setStore("DEVICE", appliancesUn);
 
-    console.log(applianceSet);
-    console.log("here");
-    console.log(appliancesUn);
     renderTags(
       appliancesTags,
       getStore("DEVICE")[0],
@@ -79,17 +88,6 @@ const appliancesTags = document.querySelector("#AppareilsCard");
       onClick,
       getTag("DEVICE")
     );
-    setInterval(() => {
-      if (!getNotify("DEVICE")) return;
-      renderTags(
-        appliancesTags,
-        getStore("DEVICE")[0],
-        "device",
-        onClick,
-        getTag("DEVICE")
-      );
-      setNotify("DEVICE", false);
-    }, 100);
   } catch (error) {
     console.error(`Could not get recipes: ${error}`);
   }

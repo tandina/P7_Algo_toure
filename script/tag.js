@@ -13,10 +13,10 @@ const renderIngredientsTags = (recipe) => {
     // + ((ingredient.hasOwnProperty("quantity") ? `:${ingredient.quantity} ` : ``))
     // + ((ingredient.hasOwnProperty("unit") ? ` ${ingredient.unit} ` : ``)));
   };
-  recipe.ingredients.forEach((current) => {
-    const ingredientTag = renderOneIngredientTags(current);
+  for (let i = 0; i < recipe.ingredients.length;i++) {
+    const ingredientTag = renderOneIngredientTags(recipe.ingredients[i]);
     render += tagBalise(ingredientTag, "p");
-  });
+  }
   return render;
 };
 
@@ -34,11 +34,11 @@ const ingredientsTags = document.querySelector("#ingredientCard");
     // the `response.json()` call will either return the JSON object or throw an error
     // <p>${test()}:${recipe.quantity} ${recipe.unit}</p>
     const recipes = await response.json();
-    recipes.forEach((recipe) => {
+    for (let i = 0;i < recipes.length;i++) {
       ingredientsTags.innerHTML += `
-            <p><span ${recipe.id}></span>${renderIngredientsTags(recipe)}</p>
+            <p><span ${recipes[i].id}></span>${renderIngredientsTags(recipes[i])}</p>
                         `;
-    });
+    }
   } catch (error) {
     console.error(`Could not get recipes: ${error}`);
   }

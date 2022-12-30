@@ -7,31 +7,40 @@ import {
   getStore,
   getNotify,
   setNotify,
+  pendingTagRender,
+  getView,
+  filterView,
 } from "./store.js";
 const data = "/data/recipes.json";
 // puts content in given balise
 
-const onClick = (value) => {
-  console.log(`value is ${value}`);
-  addTag("UTENSILS", value);
+window.setInterval(() => {
+  if (!pendingTagRender.getNotify("UTENSILS")) return;
   renderTags(
     ustensilsTags,
     getStore("UTENSILS")[0],
     "utensils",
     onClick,
-    getTag("UTENSILS")
+    filterView(getView(), "UTENSILS")
   );
+  pendingTagRender.setNotify("UTENSILS", false);
+}, 2);
+
+const onClick = (value) => {
+  addTag("UTENSILS", value);
+  pendingTagRender.setNotify("UTENSILS", true);
 };
 
 // checks if ustensil {check} is already present
 const checkDoubleUstensils = (allUstensil, check) => {
   let result = false;
-  allUstensil.forEach((ustensil) => {
+  for (let i = 0; i < allUstensil.length; i++) {
+    let ustensil = allUstensil[i];
     if (ustensil.name.toLowerCase() == check.toLowerCase()) {
       result = true;
-      return;
+      break;
     }
-  });
+  }
   return result;
 };
 
@@ -66,15 +75,10 @@ const ustensilsTags = document.querySelector("#UstensilCard");
     // the `response.json()` call will either return the JSON object or throw an error
     // <p>${test()}:${recipe.quantity} ${recipe.unit}</p>
     const recipes = await response.json();
-    // console.log(recipes);
     const ustensilSet = new Set();
     ustensilSet.add(recipes);
     const ustensils = extractUstensil(ustensilSet);
     setStore("UTENSILS", ustensils);
-
-    // console.log(ustensilSet);
-    // console.log("here");
-    // console.log(ustensils);
 
     renderTags(
       ustensilsTags,
@@ -83,17 +87,6 @@ const ustensilsTags = document.querySelector("#UstensilCard");
       onClick,
       getTag("UTENSILS")
     );
-    setInterval(() => {
-      if (!getNotify("UTENSILS")) return;
-      renderTags(
-        ustensilsTags,
-        getStore("UTENSILS")[0],
-        "utensils",
-        onClick,
-        getTag("UTENSILS")
-      );
-      setNotify("UTENSILS", false);
-    }, 100);
   } catch (error) {
     console.error(`Could not get recipes: ${error}`);
   }

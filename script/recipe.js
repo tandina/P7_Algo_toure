@@ -1,16 +1,24 @@
 const data = "/data/recipes.json";
-import { getTag, getNotify, setNotify } from "./store.js";
+import {
+  getTag,
+  getNotify,
+  setNotify,
+  setView,
+  pendingTagRender,
+} from "./store.js";
 let recipes = [];
 let backupRecipes = [];
 let change = false;
 
 const tagInstr = ["INGREDIENT", "DEVICE", "UTENSILS"];
 let prevLen = [0, 0, 0];
+let prevInstr = "";
 let tags = [getTag("INGREDIENT"), getTag("DEVICE"), getTag("UTENSILS")];
 
 const recipeData = document.querySelector("#recipesHome");
 
 const renderRecipe = (where) => {
+  console.log("renderRecipe()");
   where.innerHTML = "";
   recipes.forEach((recipe) => {
     where.innerHTML += `
@@ -46,24 +54,9 @@ const renderRecipe = (where) => {
 
 const ingredientMatchFilter = (ingredients, _filter) => {
   let ret = false;
-  // console.log(_filter);
-  ingredients.forEach(({ ingredient }) => {
-    // console.log(`${ingredient} : ${_filter}`);
-    if (ingredient.toLowerCase().includes(_filter)) {
-      ret = true;
-      return;
-    }
-  });
-  return ret;
-};
 
-const utensilMatchFilter = (utensils, _filter) => {
-  let ret = false;
-  // console.log(_filter);
-  utensils.forEach((utensil) => {
-    console.log(_filter);
-    // console.log(`${ingredient} : ${_filter}`);
-    if (utensil.toLowerCase().includes(_filter)) {
+  ingredients.forEach((ingredient) => {
+    if (ingredient.ingredient.toLowerCase().includes(_filter)) {
       ret = true;
       return;
     }
@@ -73,28 +66,39 @@ const utensilMatchFilter = (utensils, _filter) => {
 
 const recipeMatchTags = (recipe) => {
   if (!tags[0].length && !tags[1].length && !tags[2].length) return true;
+
   let match = [0, 0, 0];
-  tags[0].forEach((ingredientTag) => {
+
+  tags[0].forEach((ingredient) => {
     if (
-      ingredientMatchFilter(
-        recipe.ingredients,
-        ingredientTag.toLowerCase().trim()
-      )
+      ingredientMatchFilter(recipe.ingredients, ingredient.toLowerCase().trim())
     )
       match[0]++;
-    // console.log(ingredientTag);
   });
-  tags[1].forEach((_appliance) => {
-    if (recipe.appliance == _appliance) match[1]++;
+
+  tags[1].forEach((appliance) => {
+    if (recipe.appliance == appliance) match[1]++;
   });
-  tags[2].forEach((utensil) => {
-    if (utensilMatchFilter(recipe.ustensils, utensil)) match[2]++;
-  });
-  return match[0] || match[2] || match[1];
+  const matchDevice = (tags[1].length && match[1]) || tags[1].length == 0;
+  const matchIngredient =
+    (match[0] && match[0] == tags[0].length) || tags[0].length == 0;
+  const matchUtensils = () => {
+    if (!tags[2].length) return true;
+
+    let ret = false;
+    recipe.ustensils.forEach((ustensil) => {
+      if (tags[2].includes(ustensil)) {
+        ret = true;
+        return;
+      }
+    });
+    return ret;
+  };
+  return matchDevice && matchIngredient && matchUtensils();
 };
 
 const recipeMatchFilter = (recipe, filter) => {
-  if (!filter) return recipeMatchTags(recipe);
+  if (!filter) return true;
   filter = filter.toLowerCase().trim();
   return (
     recipe.name.toLowerCase().includes(filter) ||
@@ -109,19 +113,30 @@ searchInput.addEventListener("keydown", (e) => (change = true));
 // check for change in input every 100ms
 const InputChangeIntervalId = window.setInterval(() => {
   if (change) {
-  // case input too small
+    // case input too small
     if (searchInput.value != "" && searchInput.value.length < 3) {
       change = false;
-      return ;
-    }console.time('ForEachMethod');
-    recipes = backupRecipes;
-    recipes = recipes.filter((recipe) =>
-      recipeMatchFilter(recipe, searchInput.value)
+      return;
+    }
+    recipes = [...backupRecipes];
+    recipes = recipes.filter(
+      (recipe) =>
+        recipeMatchFilter(recipe, searchInput.value) && recipeMatchTags(recipe)
     );
+    // update view object
+    setView(recipes);
     renderRecipe(recipeData);
-    change = false;console.timeEnd('ForEachMethod');
+    // notify concerned tag card for change
+    pendingTagRender.setNotify(prevInstr, true);
+    // notify other tag cards for change
+    tagInstr.forEach((instr) => {
+      if (instr != prevInstr) {
+        pendingTagRender.setNotify(instr, true);
+      }
+    });
+    change = false;
   }
-}, 100);
+}, 2);
 
 const notificationChangeIntervalId = window.setInterval(() => {
   const removeNotification = [
@@ -135,16 +150,16 @@ const notificationChangeIntervalId = window.setInterval(() => {
     getTag("DEVICE").length,
     getTag("UTENSILS").length,
   ];
-  for (let i = 0; i < 3; i++) {
+  [0, 0, 0].forEach((_, i) => {
     if (currentLen[i] != prevLen[i]) {
       const insertTag = getTag(tagInstr[i]);
       tags[i] = insertTag;
       prevLen[i] = currentLen[i];
+      prevInstr = tagInstr[i];
       currentLen[i] = insertTag.length;
-      console.log("change");
       change = true;
     }
-  }
+  });
 }, 10);
 
 const putBalise = (content, balise) => {
@@ -164,8 +179,8 @@ const renderIngredients = (recipe) => {
       (ingredient.hasOwnProperty("unit") ? ` ${ingredient.unit} ` : ``)
     );
   };
-  recipe.ingredients.forEach((current) => {
-    let ingredient = renderOneIngredient(current);
+  recipe.ingredients.forEach((_ingredient) => {
+    let ingredient = renderOneIngredient(_ingredient);
     render += putBalise(ingredient, "p");
   });
   return render;
