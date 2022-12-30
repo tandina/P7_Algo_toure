@@ -1,18 +1,26 @@
 const data = "/data/recipes.json";
-import { getTag, getNotify, setNotify } from "./store.js";
+import {
+  getTag,
+  getNotify,
+  setNotify,
+  setView,
+  pendingTagRender,
+} from "./store.js";
 let recipes = [];
 let backupRecipes = [];
 let change = false;
 
 const tagInstr = ["INGREDIENT", "DEVICE", "UTENSILS"];
 let prevLen = [0, 0, 0];
+let prevInstr = "";
 let tags = [getTag("INGREDIENT"), getTag("DEVICE"), getTag("UTENSILS")];
 
 const recipeData = document.querySelector("#recipesHome");
 
 const renderRecipe = (where) => {
+  console.log("renderRecipe()");
   where.innerHTML = "";
-    for (let i = 0;i < recipes.length;i++) {
+  for (let i = 0; i < recipes.length; i++) {
     where.innerHTML += `
                         <article class="recipeCard col-3" id="recipeCardUn">
                         <span ${recipes[i].id}></span>
@@ -32,7 +40,9 @@ const renderRecipe = (where) => {
                                             ${renderIngredients(recipes[i])}
                                         </div>
                                         <div class="description">
-                                            <p class="productDescription">${recipes[i].description.substring(
+                                            <p class="productDescription">${recipes[
+                                              i
+                                            ].description.substring(
                                               0,
                                               150
                                             )}...</p>
@@ -46,21 +56,10 @@ const renderRecipe = (where) => {
 
 const ingredientMatchFilter = (ingredients, _filter) => {
   let ret = false;
-    for (let i = 0;i < ingredients.length;i++) {
+  for (let i = 0; i < ingredients.length; i++) {
     if (ingredients[i].ingredient.toLowerCase().includes(_filter)) {
       ret = true;
-      break ;
-    }
-  }
-  return ret;
-};
-
-const utensilMatchFilter = (utensils, _filter) => {
-  let ret = false;
-    for (let i = 0;i < utensils.length;i++) {
-    if (utensils[i].toLowerCase().includes(_filter)) {
-      ret = true;
-      break ;
+      break;
     }
   }
   return ret;
@@ -70,28 +69,44 @@ const recipeMatchTags = (recipe) => {
   if (!tags[0].length && !tags[1].length && !tags[2].length) return true;
 
   let match = [0, 0, 0];
-  for (let i = 0; i < tags[0].length;i++) {
-       if (
-      ingredientMatchFilter(
-        recipe.ingredients,
-        tags[0][i].toLowerCase().trim()
-      )
+  for (let i = 0; i < tags[0].length; i++) {
+    if (
+      ingredientMatchFilter(recipe.ingredients, tags[0][i].toLowerCase().trim())
     )
       match[0]++;
   }
-  for (let i = 0; i < tags[1].length;i++) {
-    if (recipe.appliance == tags[1][i])
-      match[1]++;
+  for (let i = 0; i < tags[1].length; i++) {
+    if (recipe.appliance == tags[1][i]) match[1]++;
   }
-  for (let i = 0; i < tags[2].length;i++) {
-    if (utensilMatchFilter(recipe.ustensils, tags[2][i]))
-      match[2]++;
-  }
-  return match[0] || match[2] || match[1];
+  const matchDevice = (tags[1].length && match[1]) || tags[1].length == 0;
+  const matchIngredient =
+    (match[0] && match[0] == tags[0].length) || tags[0].length == 0;
+  const matchUtensils = () => {
+    if (!tags[2].length) return true;
+    console.log("-x-x-x-x-x start utensils debug");
+    let i = 0;
+    while (i < recipe.ustensils.length) {
+      if (tags[2].includes(recipe.ustensils[i])) return true;
+      console.log(recipe.ustensils[i]);
+      i++;
+    }
+    return false;
+  };
+  return matchDevice && matchIngredient && matchUtensils();
 };
 
+// const recipeMatchFilter = (recipe, filter) => {
+//   if (!filter) return recipeMatchTags(recipe);
+//   filter = filter.toLowerCase().trim();
+//   return (
+//     recipe.name.toLowerCase().includes(filter) ||
+//     // || recipe.description.toLowerCase().includes(filter)
+//     ingredientMatchFilter(recipe.ingredients, filter)
+//   );
+// };
+
 const recipeMatchFilter = (recipe, filter) => {
-  if (!filter) return recipeMatchTags(recipe);
+  if (!filter) return true;
   filter = filter.toLowerCase().trim();
   return (
     recipe.name.toLowerCase().includes(filter) ||
@@ -109,16 +124,27 @@ const InputChangeIntervalId = window.setInterval(() => {
     // case input too small
     if (searchInput.value != "" && searchInput.value.length < 3) {
       change = false;
-      return ;
+      return;
     }
-    recipes = backupRecipes;
-    recipes = recipes.filter((recipe) =>
-      recipeMatchFilter(recipe, searchInput.value)
+    recipes = [...backupRecipes];
+    recipes = recipes.filter(
+      (recipe) =>
+        recipeMatchFilter(recipe, searchInput.value) && recipeMatchTags(recipe)
     );
+    // update view object
+    setView(recipes);
     renderRecipe(recipeData);
+    // notify concerned tag card for change
+    pendingTagRender.setNotify(prevInstr, true);
+    // notify other tag cards for change
+    for (let i = 0; i < tagInstr.length; i++) {
+      if (tagInstr[i] != prevInstr) {
+        pendingTagRender.setNotify(tagInstr[i], true);
+      }
+    }
     change = false;
   }
-}, 100);
+}, 2);
 
 const notificationChangeIntervalId = window.setInterval(() => {
   const removeNotification = [
@@ -137,8 +163,8 @@ const notificationChangeIntervalId = window.setInterval(() => {
       const insertTag = getTag(tagInstr[i]);
       tags[i] = insertTag;
       prevLen[i] = currentLen[i];
+      prevInstr = tagInstr[i];
       currentLen[i] = insertTag.length;
-      console.log("change");
       change = true;
     }
   }
@@ -161,7 +187,7 @@ const renderIngredients = (recipe) => {
       (ingredient.hasOwnProperty("unit") ? ` ${ingredient.unit} ` : ``)
     );
   };
-  for (let i = 0;i < recipe.ingredients.length;i++) {
+  for (let i = 0; i < recipe.ingredients.length; i++) {
     let ingredient = renderOneIngredient(recipe.ingredients[i]);
     render += putBalise(ingredient, "p");
   }
